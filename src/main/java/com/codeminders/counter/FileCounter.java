@@ -5,7 +5,6 @@ import com.codeminders.model.CountLinesResult;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Paths;
 import java.util.Scanner;
 import java.util.regex.Pattern;
 

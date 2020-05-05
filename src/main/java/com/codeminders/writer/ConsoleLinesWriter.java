@@ -2,7 +2,6 @@ package com.codeminders.writer;
 
 import com.codeminders.counter.LinesCounter;
 import com.codeminders.model.CountLinesResult;
-import com.codeminders.writer.LinesResultWriter;
 
 import java.io.OutputStream;
 
