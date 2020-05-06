@@ -1,7 +1,7 @@
 package com.codeminders.writer;
 
 import com.codeminders.counter.LinesCounter;
-import com.codeminders.model.CountLinesResult;
+import com.codeminders.model.CountLinesReport;
 
 import java.io.OutputStream;
 
@@ -15,7 +15,7 @@ public class ConsoleLinesWriter implements LinesResultWriter {
     }
 
     @Override
-    public void write(OutputStream out, CountLinesResult result) {
+    public void write(OutputStream out, CountLinesReport result) {
 
     }
 }

@@ -1,6 +1,6 @@
 package com.codeminders.counter;
 
-import com.codeminders.model.CountLinesResult;
+import com.codeminders.model.CountLinesReport;
 
 /**
  * @author Nazar Lelyak.
@@ -11,7 +11,7 @@ public class DirectoryCounter implements LinesCounter {
     }
 
     @Override
-    public CountLinesResult countLines() {
+    public CountLinesReport countLines() {
         return null;
     }
 }
