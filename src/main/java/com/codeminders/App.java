@@ -23,6 +23,10 @@ public class App {
         throw new IllegalArgumentException("Illegal resource format is provided: " + name);
     }
 
+    /**
+     * Main CLI method for processing input resource.
+     * @param args resource location - `src/test`
+     */
     public static void main(String[] args) {
         if (args.length != 1 || args[0].isEmpty()) {
             System.err.println("Incorrect usage:");
