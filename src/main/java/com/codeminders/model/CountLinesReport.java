@@ -1,5 +1,6 @@
 package com.codeminders.model;
 
+import java.nio.file.Path;
 import java.util.List;
 
 /**
@@ -7,18 +8,18 @@ import java.util.List;
  */
 public class CountLinesReport {
 
-    private String fileName;
+    private Path resource;
     private int totalLinesCount;
     private List<CountLinesReport> children;
 
-    private CountLinesReport(String fileName, int totalLinesCount, List<CountLinesReport> children) {
-        this.fileName = fileName;
+    private CountLinesReport(Path resource, int totalLinesCount, List<CountLinesReport> children) {
+        this.resource = resource;
         this.totalLinesCount = totalLinesCount;
         this.children = children;
     }
 
-    public String getFileName() {
-        return fileName;
+    public Path getResource() {
+        return resource;
     }
 
     public int getTotalLinesCount() {
@@ -35,12 +36,12 @@ public class CountLinesReport {
     }
 
     public static class Builder {
-        private String fileName;
+        private Path path;
         private int totalLinesCount;
         private List<CountLinesReport> children;
 
-        public Builder fileName(String fileName) {
-            this.fileName = fileName;
+        public Builder filePath(Path fileName) {
+            this.path = fileName;
             return this;
         }
 
@@ -55,7 +56,7 @@ public class CountLinesReport {
         }
 
         public CountLinesReport build() {
-            return new CountLinesReport(fileName, totalLinesCount, children);
+            return new CountLinesReport(path, totalLinesCount, children);
         }
     }
 }

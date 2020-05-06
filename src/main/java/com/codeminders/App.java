@@ -6,12 +6,30 @@ import com.codeminders.counter.LinesCounter;
 import com.codeminders.writer.ConsoleLinesWriter;
 import com.codeminders.writer.LinesResultWriter;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
  *
  */
 public class App {
+
+    private static LinesCounter getLineCounterProvider(String name) {
+        Path path = Paths.get(name);
+
+        if (Files.isRegularFile(path) && name.toLowerCase().endsWith(".java")) {
+            return new FileCounter(path);
+
+        } else {
+            if (Files.isDirectory(path)) {
+                return new DirectoryCounter(path);
+            }
+        }
+
+        throw new IllegalArgumentException("Unknown name format is provided for processing: " + name);
+    }
+
     public static void main(String[] args) {
         if (args.length != 1 || args[0].isEmpty()) {
             System.err.println("Incorrect usage:");
@@ -28,16 +46,4 @@ public class App {
         writer.write(System.out, fileCounter.countLines());
     }
 
-    private static LinesCounter getLineCounterProvider(String path) {
-        File f = new File(path);
-
-        if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
-            return new FileCounter(path);
-
-        } else if (f.isDirectory()) {
-            return new DirectoryCounter(path);
-        }
-
-        throw new IllegalArgumentException("Unknown path format is provided for processing: " + path);
-    }
 }
