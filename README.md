@@ -1,7 +1,3 @@
-<style type="text/css">
-  h3 { margin-left: 10px; }
-</style>
-
 Java console application that implements Counting Code Lines functionality described here 
 
     http://codekata.com/kata/kata13-counting-code-lines/
