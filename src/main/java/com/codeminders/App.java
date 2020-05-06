@@ -1,17 +1,28 @@
 package com.codeminders;
 
-import com.codeminders.counter.DirectoryCounter;
-import com.codeminders.counter.FileCounter;
+import com.codeminders.counter.JavaCodeLinesCounter;
 import com.codeminders.counter.LinesCounter;
-import com.codeminders.writer.ConsoleLinesWriter;
-import com.codeminders.writer.LinesResultWriter;
+import com.codeminders.writer.ConsoleWriter;
+import com.codeminders.writer.Writer;
 
-import java.io.File;
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 /**
- * 
+ * @author Nazar Lelyak.
  */
 public class App {
+
+    private static LinesCounter getLineCounter(String name) {
+        Path path = Paths.get(name);
+
+        if (Files.exists(path)) {
+            return new JavaCodeLinesCounter(path);
+        }
+        throw new IllegalArgumentException("Illegal resource format is provided: " + name);
+    }
+
     public static void main(String[] args) {
         if (args.length != 1 || args[0].isEmpty()) {
             System.err.println("Incorrect usage:");
@@ -21,23 +32,11 @@ public class App {
             System.exit(0);
         }
 
-        String path = args[0];
-        LinesCounter fileCounter = getLineCounterProvider(path);
+        String resource = args[0];
+        LinesCounter fileCounter = getLineCounter(resource);
 
-        LinesResultWriter writer = new ConsoleLinesWriter(fileCounter);
-        writer.write(System.out, fileCounter.countLines());
+        Writer writer = new ConsoleWriter();
+        writer.write(System.out, fileCounter);
     }
 
-    private static LinesCounter getLineCounterProvider(String path) {
-        File f = new File(path);
-
-        if (f.isFile() && f.getName().toLowerCase().endsWith(".java")) {
-            return new FileCounter(path);
-
-        } else if (f.isDirectory()) {
-            return new DirectoryCounter(path);
-        }
-
-        throw new IllegalArgumentException("Unknown path format is provided for processing: " + path);
-    }
 }
