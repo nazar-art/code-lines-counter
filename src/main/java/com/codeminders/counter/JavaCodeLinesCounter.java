@@ -7,7 +7,6 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -16,7 +15,7 @@ import java.util.stream.Stream;
 /**
  * @author Nazar Lelyak.
  */
-public class FileCounter implements LinesCounter {
+public class JavaCodeLinesCounter implements LinesCounter {
 
     private static final String BLOCK_CODE_START = "/*";
     private static final String BLOCK_CODE_END = "*/";
@@ -26,25 +25,20 @@ public class FileCounter implements LinesCounter {
 
     private final Path filePath;
     private CountLinesReport report;
+    private List<JavaCodeLinesCounter> subResources;
 
-    private List<FileCounter> subResources;
-
-    public FileCounter(Path resource) {
+    public JavaCodeLinesCounter(Path resource) {
         this.filePath = resource;
 
         if (Files.isDirectory(resource)) {
             collectSubResources(resource);
-
-        } else if (!Files.exists(filePath)
-                || !resource.getFileName().toString().toLowerCase().endsWith(".java")) {
-            throw new IllegalArgumentException("Incorrect resource: " + resource);
         }
     }
 
     private void collectSubResources(Path resource) {
         try (Stream<Path> entries = Files.list(resource)) {
             subResources = entries
-                    .map(FileCounter::new)
+                    .map(JavaCodeLinesCounter::new)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             System.err.println("Exception while traversing sub resources: " + e.getMessage());
@@ -53,23 +47,26 @@ public class FileCounter implements LinesCounter {
 
     @Override
     public CountLinesReport countLines() {
-
         if (Files.isDirectory(filePath)) {
-            // todo consider to use Tasks and execution service here
+
             List<CountLinesReport> subResourcesResults = subResources.stream()
-                    .map(FileCounter::countLines)
+                    .map(JavaCodeLinesCounter::countLines)
                     .collect(Collectors.toList());
 
-            return CountLinesReport.builder()
+            report = CountLinesReport.builder()
                     .root(filePath)
                     .resources(subResourcesResults)
                     .build();
         } else {
-            return countLinesForFile();
+            report = CountLinesReport.builder()
+                    .root(filePath)
+                    .linesCount(countLinesForFile())
+                    .build();
         }
+        return report;
     }
 
-    private CountLinesReport countLinesForFile() {
+    private int countLinesForFile() {
         int counter = 0;
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath.toFile())))) {
             boolean isBlockComment = false;
@@ -109,17 +106,14 @@ public class FileCounter implements LinesCounter {
         } catch (IOException e) {
             System.err.println("Exception during processing file: " + filePath);
         }
-        return report = CountLinesReport.builder()
-                .root(filePath)
-                .linesCount(counter)
-                .build();
+        return counter;
     }
 
     private String processLineComment(String line) {
         return line.substring(0, line.indexOf(LINE_CODE));
     }
 
-    public static void main(String[] args) {
+    /*public static void main(String[] args) {
         String [] arr = {
                 "src/test/resources/3_code_lines.java",
                 "src/test/resources/5_code_lines.java",
@@ -127,9 +121,9 @@ public class FileCounter implements LinesCounter {
         };
 
         for (String a : arr) {
-            FileCounter fileCounter = new FileCounter(Paths.get(a));
-            CountLinesReport report = fileCounter.countLines();
+            JavaCodeFileCounter javaCodeFileCounter = new JavaCodeFileCounter(Paths.get(a));
+            CountLinesReport report = javaCodeFileCounter.countLines();
             System.out.println(report.toString());
         }
-    }
+    }*/
 }

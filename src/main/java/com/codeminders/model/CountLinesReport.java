@@ -43,6 +43,15 @@ public class CountLinesReport {
         return new Builder();
     }
 
+    public int calculateCodeLines() {
+        if (resources == null || resources.isEmpty())
+            return linesCount;
+        else
+            return resources.stream()
+                    .mapToInt(CountLinesReport::getLinesCount)
+                    .sum();
+    }
+
     public static class Builder {
         private Path root;
         private int linesCount;
