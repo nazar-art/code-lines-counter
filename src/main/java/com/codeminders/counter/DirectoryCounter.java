@@ -10,6 +10,7 @@ import java.nio.file.Path;
 public class DirectoryCounter implements LinesCounter {
 
     private Path root;
+//    private List<>
 
     public DirectoryCounter(Path path) {
         root = path;
@@ -17,6 +18,9 @@ public class DirectoryCounter implements LinesCounter {
 
     @Override
     public CountLinesReport countLines() {
+
+
+
         return null;
     }
 }

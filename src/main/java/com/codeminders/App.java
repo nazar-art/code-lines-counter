@@ -19,7 +19,7 @@ public class App {
         Path path = Paths.get(name);
 
         if (Files.isRegularFile(path) && name.toLowerCase().endsWith(".java")) {
-            return new FileCounter(path);
+//            return new FileCounter(path);
 
         } else {
             if (Files.isDirectory(path)) {
@@ -40,7 +40,8 @@ public class App {
         }
 
         String path = args[0];
-        LinesCounter fileCounter = getLineCounterProvider(path);
+//        LinesCounter fileCounter = getLineCounterProvider(path);
+        LinesCounter fileCounter = new FileCounter(Paths.get(path));
 
         LinesResultWriter writer = new ConsoleLinesWriter(fileCounter);
         writer.write(System.out, fileCounter.countLines());

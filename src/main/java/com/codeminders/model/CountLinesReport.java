@@ -8,55 +8,63 @@ import java.util.List;
  */
 public class CountLinesReport {
 
-    private Path resource;
-    private int totalLinesCount;
-    private List<CountLinesReport> children;
+    private Path root;
+    private int linesCount;
+    private List<CountLinesReport> resources;
 
-    private CountLinesReport(Path resource, int totalLinesCount, List<CountLinesReport> children) {
-        this.resource = resource;
-        this.totalLinesCount = totalLinesCount;
-        this.children = children;
+    private CountLinesReport(Path root, int linesCount, List<CountLinesReport> resources) {
+        this.root = root;
+        this.linesCount = linesCount;
+        this.resources = resources;
     }
 
-    public Path getResource() {
-        return resource;
+    public Path getRoot() {
+        return root;
     }
 
-    public int getTotalLinesCount() {
-        return totalLinesCount;
+    public int getLinesCount() {
+        return linesCount;
     }
 
-    public List<CountLinesReport> getChildren() {
-        return children;
+    public List<CountLinesReport> getResources() {
+        return resources;
     }
 
+    @Override
+    public String toString() {
+        return "CountLinesReport{" +
+                "root=" + root +
+                ", linesCount=" + linesCount +
+                ", resources=" + resources +
+                '}';
+    }
 
     public static Builder builder() {
         return new Builder();
     }
 
     public static class Builder {
-        private Path path;
-        private int totalLinesCount;
-        private List<CountLinesReport> children;
+        private Path root;
+        private int linesCount;
+        private List<CountLinesReport> resources;
 
-        public Builder filePath(Path fileName) {
-            this.path = fileName;
+        public Builder root(Path path) {
+            this.root = path;
             return this;
         }
 
-        public Builder totalLinesCount(int totalLinesCount) {
-            this.totalLinesCount = totalLinesCount;
+        public Builder linesCount(int total) {
+            this.linesCount = total;
             return this;
         }
 
-        public Builder children(List<CountLinesReport> children) {
-            this.children = children;
+        public Builder resources(List<CountLinesReport> children) {
+            this.resources = children;
             return this;
         }
 
         public CountLinesReport build() {
-            return new CountLinesReport(path, totalLinesCount, children);
+            return new CountLinesReport(root, linesCount, resources);
         }
     }
 }
