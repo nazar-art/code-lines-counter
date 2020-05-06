@@ -8,4 +8,5 @@ import com.codeminders.model.CountLinesReport;
 public interface LinesCounter {
 
     CountLinesReport countLines();
+
 }

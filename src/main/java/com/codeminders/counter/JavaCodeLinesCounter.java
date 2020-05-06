@@ -24,7 +24,6 @@ public class JavaCodeLinesCounter implements LinesCounter {
     private static final String INLINE_BLOCK_COMMENT_REGEX = "/\\*/*(?s:(?!\\*/).)*\\*/";
 
     private final Path filePath;
-    private CountLinesReport report;
     private List<JavaCodeLinesCounter> subResources;
 
     public JavaCodeLinesCounter(Path resource) {
@@ -47,6 +46,7 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
     @Override
     public CountLinesReport countLines() {
+        CountLinesReport report;
         if (Files.isDirectory(filePath)) {
 
             List<CountLinesReport> subResourcesResults = subResources.stream()
@@ -113,17 +113,4 @@ public class JavaCodeLinesCounter implements LinesCounter {
         return line.substring(0, line.indexOf(LINE_CODE));
     }
 
-    /*public static void main(String[] args) {
-        String [] arr = {
-                "src/test/resources/3_code_lines.java",
-                "src/test/resources/5_code_lines.java",
-                "src/test/resources"
-        };
-
-        for (String a : arr) {
-            JavaCodeFileCounter javaCodeFileCounter = new JavaCodeFileCounter(Paths.get(a));
-            CountLinesReport report = javaCodeFileCounter.countLines();
-            System.out.println(report.toString());
-        }
-    }*/
 }

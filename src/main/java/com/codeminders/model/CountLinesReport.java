@@ -30,15 +30,6 @@ public class CountLinesReport {
         return resources;
     }
 
-    @Override
-    public String toString() {
-        return "CountLinesReport{" +
-                "root=" + root +
-                ", linesCount=" + linesCount +
-                ", resources=" + resources +
-                '}';
-    }
-
     public static Builder builder() {
         return new Builder();
     }
@@ -50,6 +41,15 @@ public class CountLinesReport {
             return resources.stream()
                     .mapToInt(CountLinesReport::getLinesCount)
                     .sum();
+    }
+
+    @Override
+    public String toString() {
+        return "CountLinesReport{" +
+                "root=" + root +
+                ", linesCount=" + linesCount +
+                ", resources=" + resources +
+                '}';
     }
 
     public static class Builder {

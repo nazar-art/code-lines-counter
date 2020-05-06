@@ -10,7 +10,7 @@ import java.nio.file.Path;
 import java.nio.file.Paths;
 
 /**
- *
+ * @author Nazar Lelyak.
  */
 public class App {
 
@@ -20,7 +20,6 @@ public class App {
         if (Files.exists(path)) {
             return new JavaCodeLinesCounter(path);
         }
-
         throw new IllegalArgumentException("Illegal resource format is provided: " + name);
     }
 
