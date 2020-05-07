@@ -35,7 +35,7 @@ public class JavaCodeLineCounterAppTest {
         reporter.publishEntry(infoMessage);
     }
 
-    @Nested
+    /*@Nested
     @Tag("File")
     @DisplayName("Testing file's resources")
     class FileResourceTest {
@@ -69,9 +69,9 @@ public class JavaCodeLineCounterAppTest {
                             "if resource name is empty exception should be thrown")
             );
         }
-    }
+    }*/
 
-    @Nested
+    /*@Nested
     @Tag("Folder")
     @DisplayName("Testing folder's resource")
     class FolderResourceTest {
@@ -96,6 +96,6 @@ public class JavaCodeLineCounterAppTest {
                             "if folder is invalid exception should be thrown")
             );
         }
-    }
+    }*/
 
 }

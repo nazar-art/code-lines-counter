@@ -1,15 +1,37 @@
 package com.codeminders;
 
+import com.codeminders.counter.DirectoryCodeLineCounter;
 import com.codeminders.counter.JavaCodeLinesCounter;
 import com.codeminders.counter.LinesCounter;
 import com.codeminders.writer.ConsoleWriter;
 import com.codeminders.writer.Writer;
+
+import java.nio.file.Files;
+import java.nio.file.Path;
+import java.nio.file.Paths;
 
 
 /**
  * @author Nazar Lelyak.
  */
 public class App {
+
+    private static LinesCounter getLineCounter(String name) {
+
+        if (name == null || name.isEmpty() || !Files.exists(Paths.get(name))) {
+            throw new IllegalArgumentException("Resource is incorrect: " + name);
+        }
+
+        Path path = Paths.get(name);
+        if (Files.isDirectory(path)) {
+            return new DirectoryCodeLineCounter(path);
+
+        } else if (Files.isRegularFile(path) && name.toLowerCase().endsWith(".java")) {
+            return new JavaCodeLinesCounter(path);
+        }
+
+        throw new IllegalArgumentException("Unknown name format is provided for processing: " + name);
+    }
 
     /**
      * Main CLI method for processing input resource.
@@ -27,7 +49,7 @@ public class App {
         }
 
         String resource = args[0];
-        LinesCounter fileCounter = new JavaCodeLinesCounter(resource);
+        LinesCounter fileCounter = getLineCounter(resource);
 
         Writer writer = new ConsoleWriter();
         writer.write(System.out, fileCounter);

@@ -25,53 +25,20 @@ public class JavaCodeLinesCounter implements LinesCounter {
     private static final String INLINE_BLOCK_COMMENT_REGEX = "/\\*/*(?s:(?!\\*/).)*\\*/";
 
     private Path filePath;
-    private List<JavaCodeLinesCounter> subResources;
 
-    public JavaCodeLinesCounter(String resource) {
-        if (resource == null || resource.isEmpty() || !Files.exists(Paths.get(resource))) {
-            throw new IllegalArgumentException("Incorrect resource is provided: " + resource);
-        }
-
-        this.filePath = Paths.get(resource);
-
-        if (Files.isDirectory(filePath)) {
-            collectSubResources(filePath);
-        }
-    }
-
-    private void collectSubResources(Path resource) {
-        try (Stream<Path> entries = Files.list(resource)) {
-            subResources = entries
-                    .map(p -> new JavaCodeLinesCounter(p.toString()))
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            System.err.println("Exception while traversing sub resources: " + e.getMessage());
-        }
+    public JavaCodeLinesCounter(Path resource) {
+        this.filePath = resource;
     }
 
     @Override
     public LinesStats countLines() {
-        LinesStats report;
-        if (Files.isDirectory(filePath)) {
-
-            List<LinesStats> subResourcesResults = subResources.stream()
-                    .map(JavaCodeLinesCounter::countLines)
-                    .collect(Collectors.toList());
-
-            report = LinesStats.builder()
-                    .resource(filePath)
-                    .subResources(subResourcesResults)
-                    .build();
-        } else {
-            report = LinesStats.builder()
-                    .resource(filePath)
-                    .linesCount(countLinesForFile())
-                    .build();
-        }
-        return report;
+        return LinesStats.builder()
+                .resource(filePath)
+                .linesCount(countLinesForFile())
+                .build();
     }
 
-    private int countLinesForFile() {
+    public int countLinesForFile() {
         int counter = 0;
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath.toFile())))) {
             boolean isBlockComment = false;
@@ -86,11 +53,11 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
                 // process block comments
                 if (line.contains(BLOCK_CODE_START) && line.contains(BLOCK_CODE_END)) {
-                    line = line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
+                    line = processInlineBlockComment(line);
                     isBlockComment = false;
 
                 } else if (line.contains(BLOCK_CODE_END) && isBlockComment) {
-                    line = line.replace(BLOCK_CODE_END, "");
+                    line = processBlockCodeEnd(line);
                     isBlockComment = false;
 
                 } else if (isBlockComment) {
@@ -112,6 +79,14 @@ public class JavaCodeLinesCounter implements LinesCounter {
             System.err.println("Exception during processing file: " + filePath);
         }
         return counter;
+    }
+
+    private String processBlockCodeEnd(String line) {
+        return line.replace(BLOCK_CODE_END, "");
+    }
+
+    private String processInlineBlockComment(String line) {
+        return line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
     }
 
     private String processLineComment(String line) {
