@@ -119,7 +119,7 @@ public class JavaCodeLineCounterAppTest {
             assertAll(
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new DirectoryLineCounter(buildPath("src/folder_not_exists")).countLines().getLinesCount(),
-                            "if folder is invalid exception should be thrown"),
+                            "if folder doesn't exist exception should be thrown"),
 
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new DirectoryLineCounter(buildPath("src/test/resources/invalid")).countLines().getLinesCount(),
