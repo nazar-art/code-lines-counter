@@ -5,23 +5,11 @@ import com.codeminders.counter.LinesCounter;
 import com.codeminders.writer.ConsoleWriter;
 import com.codeminders.writer.Writer;
 
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 /**
  * @author Nazar Lelyak.
  */
 public class App {
-
-    private static LinesCounter getLineCounter(String name) {
-        Path path = Paths.get(name);
-
-        if (Files.exists(path)) {
-            return new JavaCodeLinesCounter(name);
-        }
-        throw new IllegalArgumentException("Incorrect resource is provided: " + name);
-    }
 
     /**
      * Main CLI method for processing input resource.

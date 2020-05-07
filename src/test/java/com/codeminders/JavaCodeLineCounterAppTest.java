@@ -8,6 +8,8 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.TestReporter;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -18,6 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Nazar Lelyak.
  */
+@EnabledOnOs(OS.LINUX)
 @DisplayName("Testing Java Code Lines Counting App class")
 public class JavaCodeLineCounterAppTest {
 
@@ -48,7 +51,11 @@ public class JavaCodeLineCounterAppTest {
                             "line count should return 5 lines of code"),
                     () -> assertEquals(0,
                             new JavaCodeLinesCounter("src/test/resources/valid/0_code_lines.java").countLines().getLinesCount(),
-                            "line count should return 0 lines of code")
+                            "line count should return 0 lines of code"),
+                    () -> assertEquals(20,
+                            new JavaCodeLinesCounter("src/main/java/com/codeminders/App.java").countLines().getLinesCount(),
+                            "main App class contains 20 lines of java code :-)")
+
             );
         }
 
@@ -64,6 +71,12 @@ public class JavaCodeLineCounterAppTest {
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new JavaCodeLinesCounter("src/test/resources/invalid/test.txt").countLines(),
                             "if file is incorrect throw exception"),
+                    () -> assertThrows(IllegalArgumentException.class,
+                            () -> new JavaCodeLinesCounter(null).countLines(),
+                            "if resource is null exception should be thrown"),
+                    () -> assertThrows(IllegalArgumentException.class,
+                            () -> new JavaCodeLinesCounter("").countLines(),
+                            "if resource name is empty exception should be thrown"),
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new JavaCodeLinesCounter("src/test/resources/invalid/test.json").countLines(),
                             "if file is json throw exception")

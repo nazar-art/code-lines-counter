@@ -24,15 +24,15 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
     private static final String INLINE_BLOCK_COMMENT_REGEX = "/\\*/*(?s:(?!\\*/).)*\\*/";
 
-    private final Path filePath;
+    private Path filePath;
     private List<JavaCodeLinesCounter> subResources;
 
     public JavaCodeLinesCounter(String resource) {
-        this.filePath = Paths.get(resource);
-
-        if (!Files.exists(filePath)) {
+        if (resource == null || resource.isEmpty() || !Files.exists(Paths.get(resource))) {
             throw new IllegalArgumentException("Incorrect resource is provided: " + resource);
         }
+
+        this.filePath = Paths.get(resource);
 
         if (Files.isDirectory(filePath)) {
             collectSubResources(filePath);
