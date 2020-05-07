@@ -41,7 +41,7 @@ public class FileLinesCounter implements LinesCounter {
                 .build();
     }
 
-    public int countLinesForFile() {
+    int countLinesForFile() {
         int counter = 0;
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath.toFile())))) {
             boolean isBlockComment = false;

@@ -20,7 +20,7 @@ public class ConsoleWriter implements Writer {
     }
 
     private void formatConsoleOutput(String tab, LinesStats report) {
-        String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getResource().getFileName(), report.calculateCodeLines());
+        String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getResource().getFileName(), report.calculateTotalCodeLines());
         sb.append(prettyPrintMsg);
 
         if (report.getSubResources() != null) {

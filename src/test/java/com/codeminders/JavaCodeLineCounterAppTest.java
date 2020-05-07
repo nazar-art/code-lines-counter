@@ -102,11 +102,11 @@ public class JavaCodeLineCounterAppTest {
         void testPositiveCases() {
             assertAll(
                     () -> assertEquals(8,
-                            new DirectoryLineCounter(buildPath("src/test/resources/valid")).countLines().calculateCodeLines(),
+                            new DirectoryLineCounter(buildPath("src/test/resources/valid")).countLines().calculateTotalCodeLines(),
                             "valid folder contains 3 files with 8 in sum java code lines - 3 + 0 + 5"),
 
                     () -> assertEquals(0,
-                            new DirectoryLineCounter(buildPath("src/test/resources/empty")).countLines().calculateCodeLines(),
+                            new DirectoryLineCounter(buildPath("src/test/resources/empty")).countLines().calculateTotalCodeLines(),
                             "empty folder contains 0 lines")
             );
         }
@@ -115,11 +115,11 @@ public class JavaCodeLineCounterAppTest {
         void testNegativeCases() {
             assertAll(
                     () -> assertThrows(IllegalArgumentException.class,
-                            () -> new DirectoryLineCounter(buildPath("src/folder_not_exists")).countLines().calculateCodeLines(),
+                            () -> new DirectoryLineCounter(buildPath("src/folder_not_exists")).countLines().calculateTotalCodeLines(),
                             "if folder is invalid exception should be thrown"),
 
                     () -> assertThrows(IllegalArgumentException.class,
-                            () -> new DirectoryLineCounter(buildPath("src/test/resources/invalid")).countLines().calculateCodeLines(),
+                            () -> new DirectoryLineCounter(buildPath("src/test/resources/invalid")).countLines().calculateTotalCodeLines(),
                             "if folder content is invalid exception should be thrown")
             );
         }

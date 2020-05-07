@@ -35,7 +35,7 @@ public class LinesStats {
         return new Builder();
     }
 
-    public int calculateCodeLines() {
+    public int calculateTotalCodeLines() {
         return (subResources == null || subResources.isEmpty())
                 ? linesCount
                 : subResources.stream()
