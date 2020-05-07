@@ -28,9 +28,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 @DisplayName("Testing Java Code Lines Counting App class")
 public class JavaCodeLineCounterAppTest {
 
-    /**
-     * Pre configuration
-     */
     @BeforeEach
     void setUp(TestInfo testInfo, TestReporter reporter) {
         String infoMessage = String
@@ -130,6 +127,5 @@ public class JavaCodeLineCounterAppTest {
             );
         }
     }
-
 }
 
