@@ -12,15 +12,16 @@ import java.util.stream.Stream;
 /**
  * @author Nazar Lelyak.
  */
-public class DirectoryCodeLineCounter implements LinesCounter {
+public class DirectoryLineCounter implements LinesCounter {
 
     private Path filePath;
     private List<? extends LinesCounter> subResources;
 
-    public DirectoryCodeLineCounter(Path filePath) {
+    public DirectoryLineCounter(Path filePath) {
+        validateResource(filePath);
         this.filePath = filePath;
 
-        if (Files.isDirectory(filePath)) {
+        if (Files.isDirectory(this.filePath)) {
             collectSubResources(filePath);
         }
     }
@@ -28,7 +29,7 @@ public class DirectoryCodeLineCounter implements LinesCounter {
     private void collectSubResources(Path resource) {
         try (Stream<Path> entries = Files.list(resource)) {
             subResources = entries
-                    .map(DirectoryCodeLineCounter::new)
+                    .map(DirectoryLineCounter::new)
                     .collect(Collectors.toList());
         } catch (IOException e) {
             System.err.println("Exception while traversing sub resources: " + e.getMessage());
@@ -49,10 +50,10 @@ public class DirectoryCodeLineCounter implements LinesCounter {
                     .subResources(subResourcesResults)
                     .build();
         } else {
-            JavaCodeLinesCounter javaCodeLinesCounter = new JavaCodeLinesCounter(filePath);
+            FileLinesCounter fileLinesCounter = new FileLinesCounter(filePath);
             report = LinesStats.builder()
                     .resource(filePath)
-                    .linesCount(javaCodeLinesCounter.countLinesForFile())
+                    .linesCount(fileLinesCounter.countLinesForFile())
                     .build();
         }
 

@@ -5,18 +5,13 @@ import com.codeminders.model.LinesStats;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Nazar Lelyak.
  */
-public class JavaCodeLinesCounter implements LinesCounter {
+public class FileLinesCounter implements LinesCounter {
 
     private static final String BLOCK_CODE_START = "/*";
     private static final String BLOCK_CODE_END = "*/";
@@ -26,8 +21,16 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
     private Path filePath;
 
-    public JavaCodeLinesCounter(Path resource) {
+    public FileLinesCounter(Path resource) {
+        validateResource(resource);
+        validateFile(resource);
         this.filePath = resource;
+    }
+
+    private void validateFile(Path resource) {
+        if (!resource.getFileName().toString().endsWith(".java")) {
+            throw new IllegalArgumentException("Invalid java file: " + resource);
+        }
     }
 
     @Override

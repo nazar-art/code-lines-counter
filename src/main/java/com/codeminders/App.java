@@ -1,7 +1,7 @@
 package com.codeminders;
 
-import com.codeminders.counter.DirectoryCodeLineCounter;
-import com.codeminders.counter.JavaCodeLinesCounter;
+import com.codeminders.counter.DirectoryLineCounter;
+import com.codeminders.counter.FileLinesCounter;
 import com.codeminders.counter.LinesCounter;
 import com.codeminders.writer.ConsoleWriter;
 import com.codeminders.writer.Writer;
@@ -18,19 +18,19 @@ public class App {
 
     private static LinesCounter getLineCounter(String name) {
 
-        if (name == null || name.isEmpty() || !Files.exists(Paths.get(name))) {
-            throw new IllegalArgumentException("Resource is incorrect: " + name);
+        if (name == null || name.isEmpty()) {
+            throw new IllegalArgumentException("Resource can't be empty: " + name);
         }
 
         Path path = Paths.get(name);
         if (Files.isDirectory(path)) {
-            return new DirectoryCodeLineCounter(path);
+            return new DirectoryLineCounter(path);
 
         } else if (Files.isRegularFile(path) && name.toLowerCase().endsWith(".java")) {
-            return new JavaCodeLinesCounter(path);
+            return new FileLinesCounter(path);
         }
 
-        throw new IllegalArgumentException("Unknown name format is provided for processing: " + name);
+        throw new IllegalArgumentException("Unknown format is provided for processing: " + name);
     }
 
     /**
