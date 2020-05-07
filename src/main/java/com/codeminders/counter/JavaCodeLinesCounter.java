@@ -7,6 +7,7 @@ import java.io.FileReader;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.List;
 import java.util.Scanner;
 import java.util.stream.Collectors;
@@ -26,18 +27,25 @@ public class JavaCodeLinesCounter implements LinesCounter {
     private final Path filePath;
     private List<JavaCodeLinesCounter> subResources;
 
-    public JavaCodeLinesCounter(Path resource) {
-        this.filePath = resource;
+    public JavaCodeLinesCounter(String resource) {
+        this.filePath = Paths.get(resource);
 
-        if (Files.isDirectory(resource)) {
-            collectSubResources(resource);
+        if (!Files.exists(filePath)) {
+            throw new IllegalArgumentException("Incorrect resource is provided: " + resource);
+        }
+
+        if (Files.isDirectory(filePath)) {
+            collectSubResources(filePath);
+
+        } else if (!filePath.getFileName().toString().toLowerCase().endsWith(".java")) {
+            throw new IllegalArgumentException("Not a java file is provided: " + resource);
         }
     }
 
     private void collectSubResources(Path resource) {
         try (Stream<Path> entries = Files.list(resource)) {
             subResources = entries
-                    .map(JavaCodeLinesCounter::new)
+                    .map(p -> new JavaCodeLinesCounter(p.toString()))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             System.err.println("Exception while traversing sub resources: " + e.getMessage());
@@ -54,12 +62,12 @@ public class JavaCodeLinesCounter implements LinesCounter {
                     .collect(Collectors.toList());
 
             report = LinesStats.builder()
-                    .root(filePath)
-                    .resources(subResourcesResults)
+                    .resource(filePath)
+                    .subResources(subResourcesResults)
                     .build();
         } else {
             report = LinesStats.builder()
-                    .root(filePath)
+                    .resource(filePath)
                     .linesCount(countLinesForFile())
                     .build();
         }
@@ -97,10 +105,10 @@ public class JavaCodeLinesCounter implements LinesCounter {
                     line = processLineComment(line);
                 }
 
-                // count results
+                // count code results
                 if (!line.isEmpty()) {
                     counter += 1;
-//                    System.out.println(line);
+                    //System.out.println(line);
                 }
             }
         } catch (IOException e) {

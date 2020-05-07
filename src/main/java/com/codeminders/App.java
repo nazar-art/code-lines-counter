@@ -18,14 +18,15 @@ public class App {
         Path path = Paths.get(name);
 
         if (Files.exists(path)) {
-            return new JavaCodeLinesCounter(path);
+            return new JavaCodeLinesCounter(name);
         }
         throw new IllegalArgumentException("Incorrect resource is provided: " + name);
     }
 
     /**
      * Main CLI method for processing input resource.
-     * @param args java file or resource location, like relative - `src/test`
+     *
+     * @param args java file or resource location, like relative - `src/test/resources`
      *             or absolute `/home/nazar/Software/java/jdk1.8.0_45/src`.
      */
     public static void main(String[] args) {
@@ -38,7 +39,7 @@ public class App {
         }
 
         String resource = args[0];
-        LinesCounter fileCounter = getLineCounter(resource);
+        LinesCounter fileCounter = new JavaCodeLinesCounter(resource);
 
         Writer writer = new ConsoleWriter();
         writer.write(System.out, fileCounter);

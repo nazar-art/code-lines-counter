@@ -20,11 +20,11 @@ public class ConsoleWriter implements Writer {
     }
 
     private void formatConsoleOutput(String tab, LinesStats report) {
-        String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getRoot().getFileName(), report.calculateCodeLines());
+        String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getResource().getFileName(), report.calculateCodeLines());
         sb.append(prettyPrintMsg);
 
-        if (report.getResources() != null) {
-            report.getResources().stream()
+        if (report.getSubResources() != null) {
+            report.getSubResources().stream()
                     .filter(Objects::nonNull)
                     .forEach(res -> formatConsoleOutput(tab.concat("  "), res));
         }
