@@ -5,18 +5,13 @@ import com.codeminders.model.LinesStats;
 import java.io.BufferedReader;
 import java.io.FileReader;
 import java.io.IOException;
-import java.nio.file.Files;
 import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.util.List;
 import java.util.Scanner;
-import java.util.stream.Collectors;
-import java.util.stream.Stream;
 
 /**
  * @author Nazar Lelyak.
  */
-public class JavaCodeLinesCounter implements LinesCounter {
+public class FileLinesCounter implements LinesCounter {
 
     private static final String BLOCK_CODE_START = "/*";
     private static final String BLOCK_CODE_END = "*/";
@@ -25,56 +20,28 @@ public class JavaCodeLinesCounter implements LinesCounter {
     private static final String INLINE_BLOCK_COMMENT_REGEX = "/\\*/*(?s:(?!\\*/).)*\\*/";
 
     private Path filePath;
-    private List<JavaCodeLinesCounter> subResources;
 
-    public JavaCodeLinesCounter(String resource) {
-        if (resource == null || resource.isEmpty() || !Files.exists(Paths.get(resource))) {
-            throw new IllegalArgumentException("Incorrect resource is provided: " + resource);
-        }
-
-        this.filePath = Paths.get(resource);
-
-        if (Files.isDirectory(filePath)) {
-            collectSubResources(filePath);
-
-        } else if (!filePath.getFileName().toString().toLowerCase().endsWith(".java")) {
-            throw new IllegalArgumentException("Not a java file is provided: " + resource);
-        }
+    public FileLinesCounter(Path resource) {
+        validateResource(resource);
+        validateFile(resource);
+        this.filePath = resource;
     }
 
-    private void collectSubResources(Path resource) {
-        try (Stream<Path> entries = Files.list(resource)) {
-            subResources = entries
-                    .map(p -> new JavaCodeLinesCounter(p.toString()))
-                    .collect(Collectors.toList());
-        } catch (IOException e) {
-            System.err.println("Exception while traversing sub resources: " + e.getMessage());
+    private void validateFile(Path resource) {
+        if (!resource.getFileName().toString().endsWith(".java")) {
+            throw new IllegalArgumentException("Invalid java file: " + resource);
         }
     }
 
     @Override
     public LinesStats countLines() {
-        LinesStats report;
-        if (Files.isDirectory(filePath)) {
-
-            List<LinesStats> subResourcesResults = subResources.stream()
-                    .map(JavaCodeLinesCounter::countLines)
-                    .collect(Collectors.toList());
-
-            report = LinesStats.builder()
-                    .resource(filePath)
-                    .subResources(subResourcesResults)
-                    .build();
-        } else {
-            report = LinesStats.builder()
-                    .resource(filePath)
-                    .linesCount(countLinesForFile())
-                    .build();
-        }
-        return report;
+        return LinesStats.builder()
+                .resource(filePath)
+                .linesCount(countLinesForFile())
+                .build();
     }
 
-    private int countLinesForFile() {
+    public int countLinesForFile() {
         int counter = 0;
         try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath.toFile())))) {
             boolean isBlockComment = false;
@@ -89,11 +56,11 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
                 // process block comments
                 if (line.contains(BLOCK_CODE_START) && line.contains(BLOCK_CODE_END)) {
-                    line = line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
+                    line = processInlineBlockComment(line);
                     isBlockComment = false;
 
                 } else if (line.contains(BLOCK_CODE_END) && isBlockComment) {
-                    line = line.replace(BLOCK_CODE_END, "");
+                    line = processBlockCodeEnd(line);
                     isBlockComment = false;
 
                 } else if (isBlockComment) {
@@ -115,6 +82,14 @@ public class JavaCodeLinesCounter implements LinesCounter {
             System.err.println("Exception during processing file: " + filePath);
         }
         return counter;
+    }
+
+    private String processBlockCodeEnd(String line) {
+        return line.replace(BLOCK_CODE_END, "");
+    }
+
+    private String processInlineBlockComment(String line) {
+        return line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
     }
 
     private String processLineComment(String line) {
