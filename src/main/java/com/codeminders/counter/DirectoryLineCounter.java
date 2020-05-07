@@ -38,7 +38,7 @@ public class DirectoryLineCounter implements LinesCounter {
 
     @Override
     public LinesStats countLines() {
-        LinesStats report;
+        LinesStats stats;
         if (Files.isDirectory(filePath)) {
 
             List<LinesStats> subResourcesResults = subResources.stream()
@@ -49,19 +49,19 @@ public class DirectoryLineCounter implements LinesCounter {
                     .map(LinesStats::getLinesCount)
                     .reduce(0, Integer::sum);
 
-            report = LinesStats.builder()
+            stats = LinesStats.builder()
                     .resource(filePath)
                     .linesCount(total)
                     .subResources(subResourcesResults)
                     .build();
         } else {
             FileLinesCounter fileLinesCounter = new FileLinesCounter(filePath);
-            report = LinesStats.builder()
+            stats = LinesStats.builder()
                     .resource(filePath)
                     .linesCount(fileLinesCounter.countLinesForFile())
                     .build();
         }
 
-        return report;
+        return stats;
     }
 }
