@@ -61,7 +61,7 @@ public class JavaCodeLineCounterAppTest {
 
                     () -> assertEquals(0,
                             new FileLinesCounter(buildPath("src/test/resources/empty/empty.java")).countLines().getLinesCount(),
-                            "line count should return 0 lines of code")
+                            "empty file should return 0 lines")
             );
         }
 
