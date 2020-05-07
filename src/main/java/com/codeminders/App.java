@@ -20,12 +20,13 @@ public class App {
         if (Files.exists(path)) {
             return new JavaCodeLinesCounter(path);
         }
-        throw new IllegalArgumentException("Illegal resource format is provided: " + name);
+        throw new IllegalArgumentException("Incorrect resource is provided: " + name);
     }
 
     /**
      * Main CLI method for processing input resource.
-     * @param args resource location - `src/test`
+     * @param args java file or resource location, like relative - `src/test`
+     *             or absolute `/home/nazar/Software/java/jdk1.8.0_45/src`.
      */
     public static void main(String[] args) {
         if (args.length != 1 || args[0].isEmpty()) {

@@ -1,7 +1,7 @@
 package com.codeminders.writer;
 
 import com.codeminders.counter.LinesCounter;
-import com.codeminders.model.CountLinesReport;
+import com.codeminders.model.CountLinesStats;
 
 import java.io.PrintStream;
 import java.util.Objects;
@@ -19,7 +19,7 @@ public class ConsoleWriter implements Writer {
         out.print(sb.toString());
     }
 
-    private void formatConsoleOutput(String tab, CountLinesReport report) {
+    private void formatConsoleOutput(String tab, CountLinesStats report) {
         String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getRoot().getFileName(), report.calculateCodeLines());
         sb.append(prettyPrintMsg);
 

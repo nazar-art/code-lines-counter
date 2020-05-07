@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * @author Nazar Lelyak.
  */
-public class CountLinesReport {
+public class CountLinesStats {
 
     private Path root;
     private int linesCount;
-    private List<CountLinesReport> resources;
+    private List<CountLinesStats> resources;
 
-    private CountLinesReport(Path root, int linesCount, List<CountLinesReport> resources) {
+    private CountLinesStats(Path root, int linesCount, List<CountLinesStats> resources) {
         this.root = root;
         this.linesCount = linesCount;
         this.resources = resources;
@@ -26,7 +26,7 @@ public class CountLinesReport {
         return linesCount;
     }
 
-    public List<CountLinesReport> getResources() {
+    public List<CountLinesStats> getResources() {
         return resources;
     }
 
@@ -35,12 +35,12 @@ public class CountLinesReport {
     }
 
     public int calculateCodeLines() {
-        if (resources == null || resources.isEmpty())
-            return linesCount;
-        else
-            return resources.stream()
-                    .mapToInt(CountLinesReport::getLinesCount)
+        return (resources == null || resources.isEmpty())
+                ? linesCount
+                : resources.stream()
+                    .mapToInt(CountLinesStats::getLinesCount)
                     .sum();
+
     }
 
     @Override
@@ -55,7 +55,7 @@ public class CountLinesReport {
     public static class Builder {
         private Path root;
         private int linesCount;
-        private List<CountLinesReport> resources;
+        private List<CountLinesStats> resources;
 
         public Builder root(Path path) {
             this.root = path;
@@ -67,13 +67,13 @@ public class CountLinesReport {
             return this;
         }
 
-        public Builder resources(List<CountLinesReport> children) {
+        public Builder resources(List<CountLinesStats> children) {
             this.resources = children;
             return this;
         }
 
-        public CountLinesReport build() {
-            return new CountLinesReport(root, linesCount, resources);
+        public CountLinesStats build() {
+            return new CountLinesStats(root, linesCount, resources);
         }
     }
 }
