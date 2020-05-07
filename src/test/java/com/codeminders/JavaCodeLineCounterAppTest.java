@@ -106,7 +106,7 @@ public class JavaCodeLineCounterAppTest {
                             "valid folder contains 3 files with 8 in sum java code lines - 3 + 0 + 5"),
 
                     () -> assertEquals(0,
-                            new DirectoryLineCounter(buildPath("src/test/resources/emptyFolder")).countLines().calculateCodeLines(),
+                            new DirectoryLineCounter(buildPath("src/test/resources/empty")).countLines().calculateCodeLines(),
                             "empty folder contains 0 lines")
             );
         }

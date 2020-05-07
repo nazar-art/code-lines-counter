@@ -17,7 +17,6 @@ import java.nio.file.Paths;
 public class App {
 
     private static LinesCounter getLineCounter(String name) {
-
         if (name == null || name.isEmpty()) {
             throw new IllegalArgumentException("Resource can't be empty: " + name);
         }
