@@ -51,11 +51,7 @@ public class JavaCodeLineCounterAppTest {
                             "line count should return 5 lines of code"),
                     () -> assertEquals(0,
                             new JavaCodeLinesCounter("src/test/resources/valid/0_code_lines.java").countLines().getLinesCount(),
-                            "line count should return 0 lines of code"),
-                    () -> assertEquals(20,
-                            new JavaCodeLinesCounter("src/main/java/com/codeminders/App.java").countLines().getLinesCount(),
-                            "main App class contains 20 lines of java code :-)")
-
+                            "line count should return 0 lines of code")
             );
         }
 
