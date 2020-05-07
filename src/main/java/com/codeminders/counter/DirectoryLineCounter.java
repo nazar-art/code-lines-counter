@@ -14,21 +14,21 @@ import java.util.stream.Stream;
  */
 public class DirectoryLineCounter implements LinesCounter {
 
-    private Path filePath;
-    private List<? extends LinesCounter> subResources;
+    private Path root;
+    private List<? extends LinesCounter> subFolders;
 
-    public DirectoryLineCounter(Path filePath) {
-        validateResource(filePath);
-        this.filePath = filePath;
+    public DirectoryLineCounter(Path path) {
+        validateResource(path);
+        root = path;
 
-        if (Files.isDirectory(this.filePath)) {
-            collectSubResources(filePath);
+        if (Files.isDirectory(root)) {
+            collectSubResources(path);
         }
     }
 
     private void collectSubResources(Path resource) {
         try (Stream<Path> entries = Files.list(resource)) {
-            subResources = entries
+            subFolders = entries
                     .map(DirectoryLineCounter::new)
                     .collect(Collectors.toList());
         } catch (IOException e) {
@@ -39,9 +39,9 @@ public class DirectoryLineCounter implements LinesCounter {
     @Override
     public LinesStats countLines() {
         LinesStats stats;
-        if (Files.isDirectory(filePath)) {
+        if (Files.isDirectory(root)) {
 
-            List<LinesStats> subResourcesResults = subResources.stream()
+            List<LinesStats> subResourcesResults = subFolders.stream()
                     .map(LinesCounter::countLines)
                     .collect(Collectors.toList());
 
@@ -50,14 +50,14 @@ public class DirectoryLineCounter implements LinesCounter {
                     .reduce(0, Integer::sum);
 
             stats = LinesStats.builder()
-                    .resource(filePath)
+                    .resource(root)
                     .linesCount(total)
                     .subResources(subResourcesResults)
                     .build();
         } else {
-            FileLinesCounter fileLinesCounter = new FileLinesCounter(filePath);
+            FileLinesCounter fileLinesCounter = new FileLinesCounter(root);
             stats = LinesStats.builder()
-                    .resource(filePath)
+                    .resource(root)
                     .linesCount(fileLinesCounter.countLinesForFile())
                     .build();
         }

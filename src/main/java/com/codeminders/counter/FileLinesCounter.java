@@ -21,15 +21,15 @@ public class FileLinesCounter implements LinesCounter {
 
     private Path filePath;
 
-    public FileLinesCounter(Path resource) {
-        validateResource(resource);
-        validateFile(resource);
-        this.filePath = resource;
+    public FileLinesCounter(Path path) {
+        validateResource(path);
+        validateFile(path);
+        this.filePath = path;
     }
 
-    private void validateFile(Path resource) {
-        if (!resource.getFileName().toString().endsWith(".java")) {
-            throw new IllegalArgumentException("Invalid java file: " + resource);
+    private void validateFile(Path path) {
+        if (!path.getFileName().toString().endsWith(".java")) {
+            throw new IllegalArgumentException("Invalid java file: " + path);
         }
     }
 

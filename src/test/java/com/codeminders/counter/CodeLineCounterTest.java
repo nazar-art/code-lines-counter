@@ -1,4 +1,4 @@
-package com.codeminders;
+package com.codeminders.counter;
 
 import com.codeminders.counter.DirectoryLineCounter;
 import com.codeminders.counter.FileLinesCounter;
@@ -26,7 +26,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 @EnabledOnOs({OS.LINUX, OS.MAC})
 @DisplayName("Testing Java Code Lines Counting App class")
-public class JavaCodeLineCounterAppTest {
+public class CodeLineCounterTest {
 
     @BeforeEach
     void setUp(TestInfo testInfo, TestReporter reporter) {
