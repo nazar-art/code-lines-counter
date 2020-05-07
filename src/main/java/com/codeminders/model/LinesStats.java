@@ -6,13 +6,13 @@ import java.util.List;
 /**
  * @author Nazar Lelyak.
  */
-public class CountLinesStats {
+public class LinesStats {
 
     private Path root;
     private int linesCount;
-    private List<CountLinesStats> resources;
+    private List<LinesStats> resources;
 
-    private CountLinesStats(Path root, int linesCount, List<CountLinesStats> resources) {
+    private LinesStats(Path root, int linesCount, List<LinesStats> resources) {
         this.root = root;
         this.linesCount = linesCount;
         this.resources = resources;
@@ -26,7 +26,7 @@ public class CountLinesStats {
         return linesCount;
     }
 
-    public List<CountLinesStats> getResources() {
+    public List<LinesStats> getResources() {
         return resources;
     }
 
@@ -38,7 +38,7 @@ public class CountLinesStats {
         return (resources == null || resources.isEmpty())
                 ? linesCount
                 : resources.stream()
-                    .mapToInt(CountLinesStats::getLinesCount)
+                    .mapToInt(LinesStats::getLinesCount)
                     .sum();
 
     }
@@ -55,7 +55,7 @@ public class CountLinesStats {
     public static class Builder {
         private Path root;
         private int linesCount;
-        private List<CountLinesStats> resources;
+        private List<LinesStats> resources;
 
         public Builder root(Path path) {
             this.root = path;
@@ -67,13 +67,13 @@ public class CountLinesStats {
             return this;
         }
 
-        public Builder resources(List<CountLinesStats> children) {
+        public Builder resources(List<LinesStats> children) {
             this.resources = children;
             return this;
         }
 
-        public CountLinesStats build() {
-            return new CountLinesStats(root, linesCount, resources);
+        public LinesStats build() {
+            return new LinesStats(root, linesCount, resources);
         }
     }
 }

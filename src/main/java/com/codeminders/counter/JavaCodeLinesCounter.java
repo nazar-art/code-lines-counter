@@ -1,6 +1,6 @@
 package com.codeminders.counter;
 
-import com.codeminders.model.CountLinesStats;
+import com.codeminders.model.LinesStats;
 
 import java.io.BufferedReader;
 import java.io.FileReader;
@@ -45,20 +45,20 @@ public class JavaCodeLinesCounter implements LinesCounter {
     }
 
     @Override
-    public CountLinesStats countLines() {
-        CountLinesStats report;
+    public LinesStats countLines() {
+        LinesStats report;
         if (Files.isDirectory(filePath)) {
 
-            List<CountLinesStats> subResourcesResults = subResources.stream()
+            List<LinesStats> subResourcesResults = subResources.stream()
                     .map(JavaCodeLinesCounter::countLines)
                     .collect(Collectors.toList());
 
-            report = CountLinesStats.builder()
+            report = LinesStats.builder()
                     .root(filePath)
                     .resources(subResourcesResults)
                     .build();
         } else {
-            report = CountLinesStats.builder()
+            report = LinesStats.builder()
                     .root(filePath)
                     .linesCount(countLinesForFile())
                     .build();

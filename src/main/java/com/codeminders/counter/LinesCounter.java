@@ -1,12 +1,12 @@
 package com.codeminders.counter;
 
-import com.codeminders.model.CountLinesStats;
+import com.codeminders.model.LinesStats;
 
 /**
  * @author Nazar Lelyak.
  */
 public interface LinesCounter {
 
-    CountLinesStats countLines();
+    LinesStats countLines();
 
 }
