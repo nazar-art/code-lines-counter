@@ -20,7 +20,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  *
  * @author Nazar Lelyak.
  */
-@EnabledOnOs(OS.LINUX)
+@EnabledOnOs({OS.LINUX, OS.MAC})
 @DisplayName("Testing Java Code Lines Counting App class")
 public class JavaCodeLineCounterAppTest {
 
