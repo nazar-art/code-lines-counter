@@ -36,9 +36,6 @@ public class JavaCodeLinesCounter implements LinesCounter {
 
         if (Files.isDirectory(filePath)) {
             collectSubResources(filePath);
-
-        } else if (!filePath.getFileName().toString().toLowerCase().endsWith(".java")) {
-            throw new IllegalArgumentException("Not a java file is provided: " + resource);
         }
     }
 

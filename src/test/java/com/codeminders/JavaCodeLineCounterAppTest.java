@@ -62,20 +62,11 @@ public class JavaCodeLineCounterAppTest {
                             () -> new JavaCodeLinesCounter("src/this_file_doesnt_exist.java").countLines(),
                             "if file doesn't throw exception"),
                     () -> assertThrows(IllegalArgumentException.class,
-                            () -> new JavaCodeLinesCounter("src/test/resources/invalid/mat-photo.jpg").countLines(),
-                            "if file is photo throw exception"),
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new JavaCodeLinesCounter("src/test/resources/invalid/test.txt").countLines(),
-                            "if file is incorrect throw exception"),
-                    () -> assertThrows(IllegalArgumentException.class,
                             () -> new JavaCodeLinesCounter(null).countLines(),
                             "if resource is null exception should be thrown"),
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new JavaCodeLinesCounter("").countLines(),
-                            "if resource name is empty exception should be thrown"),
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new JavaCodeLinesCounter("src/test/resources/invalid/test.json").countLines(),
-                            "if file is json throw exception")
+                            "if resource name is empty exception should be thrown")
             );
         }
     }
@@ -102,10 +93,7 @@ public class JavaCodeLineCounterAppTest {
             assertAll(
                     () -> assertThrows(IllegalArgumentException.class,
                             () -> new JavaCodeLinesCounter("src/folder_not_exists").countLines().calculateCodeLines(),
-                            "if folder is invalid exception should be thrown"),
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new JavaCodeLinesCounter("src/test/resources/invalid").countLines().calculateCodeLines(),
-                            "if folder content is invalid exception should be thrown")
+                            "if folder is invalid exception should be thrown")
             );
         }
     }
