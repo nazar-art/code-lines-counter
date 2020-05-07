@@ -35,15 +35,6 @@ public class LinesStats {
         return new Builder();
     }
 
-    public int calculateTotalCodeLines() {
-        return (subResources == null || subResources.isEmpty())
-                ? linesCount
-                : subResources.stream()
-                .mapToInt(LinesStats::getLinesCount)
-                .sum();
-
-    }
-
     @Override
     public String toString() {
         return "LinesStats{" +

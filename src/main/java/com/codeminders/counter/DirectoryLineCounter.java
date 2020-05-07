@@ -45,8 +45,13 @@ public class DirectoryLineCounter implements LinesCounter {
                     .map(LinesCounter::countLines)
                     .collect(Collectors.toList());
 
+            int total = subResourcesResults.stream()
+                    .map(LinesStats::getLinesCount)
+                    .reduce(0, Integer::sum);
+
             report = LinesStats.builder()
                     .resource(filePath)
+                    .linesCount(total)
                     .subResources(subResourcesResults)
                     .build();
         } else {
