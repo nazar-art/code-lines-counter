@@ -50,11 +50,17 @@ public class JavaCodeLineCounterAppTest {
                     () -> assertEquals(3,
                             new FileLinesCounter(buildPath("src/test/resources/valid/3_code_lines.java")).countLines().getLinesCount(),
                             "line count should return 3 lines of code"),
+
                     () -> assertEquals(5,
                             new FileLinesCounter(buildPath("src/test/resources/valid/5_code_lines.java")).countLines().getLinesCount(),
                             "line count should return 5 lines of code"),
+
                     () -> assertEquals(0,
                             new FileLinesCounter(buildPath("src/test/resources/valid/0_code_lines.java")).countLines().getLinesCount(),
+                            "line count should return 0 lines of code"),
+
+                    () -> assertEquals(0,
+                            new FileLinesCounter(buildPath("src/test/resources/empty/empty.java")).countLines().getLinesCount(),
                             "line count should return 0 lines of code")
             );
         }
