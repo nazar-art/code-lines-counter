@@ -11,6 +11,7 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.function.Executable;
 
 import java.io.ByteArrayOutputStream;
 import java.io.PrintStream;
@@ -29,10 +30,17 @@ class ConsoleOutputTest implements BaseTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
+    private final StringBuilder expectedErrMsg = new StringBuilder();
+
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+
+        expectedErrMsg.append("Incorrect usage:").append(System.lineSeparator());
+        expectedErrMsg.append("Please provide correct file or folder path").append(System.lineSeparator());
+        expectedErrMsg.append("Example: /tmp/java_sources_folder").append(System.lineSeparator());
+        expectedErrMsg.append("Example: /tmp/JavaDemo.java").append(System.lineSeparator());
     }
 
     @AfterEach
@@ -47,7 +55,7 @@ class ConsoleOutputTest implements BaseTest {
     class AppTest {
 
         @Test
-        void testCorrectInput() {
+        void testCorrectFileInput() {
             App.main(new String[]{"src/test/resources/valid/5_code_lines.java"});
 
             String expected = String.format("5_code_lines.java : 5%s", System.lineSeparator());
@@ -55,19 +63,66 @@ class ConsoleOutputTest implements BaseTest {
         }
 
         @Test
-        void testEmptyInput() {
-            StringBuilder expected = new StringBuilder("Incorrect usage:").append(System.lineSeparator());
-            expected.append("Please provide correct file or folder path").append(System.lineSeparator());
-            expected.append("Example: /tmp/java_sources_folder").append(System.lineSeparator());
-            expected.append("Example: /tmp/JavaDemo.java").append(System.lineSeparator());
+        void testCorrectFolderInput() {
+            App.main(new String[]{"src/test/resources/valid"});
 
-            App.main(new String[]{""});
-            assertEquals(expected.toString(), errContent.toString());
+            StringBuilder sb = new StringBuilder("valid : 8").append(System.lineSeparator());
+            sb.append("  0_code_lines.java : 0").append(System.lineSeparator());
+            sb.append("  3_code_lines.java : 3").append(System.lineSeparator());
+            sb.append("  5_code_lines.java : 5").append(System.lineSeparator());
+
+            assertEquals(sb.toString(), outContent.toString());
         }
 
         @Test
-        void testUnknownInput() {
-            assertThrows(IllegalArgumentException.class, () -> App.main(new String[]{"unknown_input"}));
+        void testIfEmptyInputExceptionShouldBeThrown() {
+            App.main(new String[]{""});
+            assertEquals(expectedErrMsg.toString(), errContent.toString());
+        }
+
+        @Test
+        void testIfNoInputExceptionShouldBeThrown() {
+            App.main(new String[]{});
+            assertEquals(expectedErrMsg.toString(), errContent.toString());
+        }
+
+        @Test
+        void testIfTwoInputsExceptionShouldBeThrown() {
+
+
+            App.main(new String[]{"", ""});
+            assertEquals(expectedErrMsg.toString(), errContent.toString());
+        }
+
+        @Test
+        void testInvalidFileInputs() {
+            assertThrows(IllegalArgumentException.class, getAppInstance("doesn't exist"),
+                    "if input is incorrect exception should be thrown");
+
+            assertThrows(IllegalArgumentException.class, getAppInstance("src/test/resources/invalid/mat-photo.jpg"),
+                    "if file is photo throw exception");
+
+            assertThrows(IllegalArgumentException.class, getAppInstance("src/test/resources/invalid/test.txt"),
+                    "if file is incorrect throw exception");
+
+            assertThrows(IllegalArgumentException.class, getAppInstance("src/test/resources/invalid/test.json"),
+                    "if file is json throw exception");
+        }
+
+        @Test
+        void testInvalidFolderInputs() {
+            assertThrows(IllegalArgumentException.class,
+                    getAppInstance("src/test/resources/invalid"),
+                    "if folder's content is invalid exception should be thrown");
+
+            assertThrows(IllegalArgumentException.class,
+                    getAppInstance("src/test/resources/folder_not_exist"),
+                    "if folder doesn't exist exception should be thrown");
+        }
+
+
+        private Executable getAppInstance(String... resource) {
+            return () -> App.main(resource);
         }
     }
 

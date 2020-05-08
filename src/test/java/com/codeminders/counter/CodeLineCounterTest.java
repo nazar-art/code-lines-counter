@@ -8,13 +8,12 @@ import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 
 /**
  * Unit tests for Java Code Lines Counting App.
- *
+ * 
  * @author Nazar Lelyak.
  */
 @EnabledOnOs({OS.LINUX, OS.MAC})
@@ -28,52 +27,53 @@ public class CodeLineCounterTest implements BaseTest {
 
         @Test
         void testPositiveCases() {
-            assertAll(
-                    () -> assertEquals(3,
-                            new FileLinesCounter(buildPath("src/test/resources/valid/3_code_lines.java")).countLines().getLinesCount(),
-                            "line count should return 3 lines of code"),
+            assertEquals(3,
+                    getFileCount("src/test/resources/valid/3_code_lines.java"),
+                    "line count should return 3 lines of code");
 
-                    () -> assertEquals(5,
-                            new FileLinesCounter(buildPath("src/test/resources/valid/5_code_lines.java")).countLines().getLinesCount(),
-                            "line count should return 5 lines of code"),
+            assertEquals(5,
+                    getFileCount("src/test/resources/valid/5_code_lines.java"),
+                    "line count should return 5 lines of code");
 
-                    () -> assertEquals(0,
-                            new FileLinesCounter(buildPath("src/test/resources/valid/0_code_lines.java")).countLines().getLinesCount(),
-                            "line count should return 0 lines of code"),
+            assertEquals(0,
+                    getFileCount("src/test/resources/valid/0_code_lines.java"),
+                    "line count should return 0 lines of code");
 
-                    () -> assertEquals(0,
-                            new FileLinesCounter(buildPath("src/test/resources/empty/empty.java")).countLines().getLinesCount(),
-                            "empty file should return 0 lines")
-            );
+            assertEquals(0,
+                    getFileCount("src/test/resources/empty/empty.java"),
+                    "empty file should return 0 lines");
+
+        }
+
+        private int getFileCount(String file) {
+            return new FileLinesCounter(buildPath(file)).countLines().getLinesCount();
         }
 
         @Test
         void testNegativeCases() {
-            assertAll(
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(buildPath("src/this_file_doesnt_exist.java")).countLines(),
-                            "if file doesn't throw exception"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFileCount("src/this_file_doesnt_exist.java"),
+                    "if file doesn't throw exception");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(buildPath("src/test/resources/invalid/mat-photo.jpg")).countLines(),
-                            "if file is photo throw exception"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFileCount("src/test/resources/invalid/mat-photo.jpg"),
+                    "if file is photo throw exception");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(buildPath("src/test/resources/invalid/test.txt")).countLines(),
-                            "if file is incorrect throw exception"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFileCount("src/test/resources/invalid/test.txt"),
+                    "if file is incorrect throw exception");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(null).countLines(),
-                            "if resource is null exception should be thrown"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> new FileLinesCounter(null).countLines(),
+                    "if resource is null exception should be thrown");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(buildPath("")).countLines(),
-                            "if resource name is empty exception should be thrown"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFileCount(""),
+                    "if resource name is empty exception should be thrown");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new FileLinesCounter(buildPath("src/test/resources/invalid/test.json")).countLines(),
-                            "if file is json throw exception")
-            );
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFileCount("src/test/resources/invalid/test.json"),
+                    "if file is json throw exception");
         }
     }
 
@@ -84,28 +84,28 @@ public class CodeLineCounterTest implements BaseTest {
 
         @Test
         void testPositiveCases() {
-            assertAll(
-                    () -> assertEquals(8,
-                            new DirectoryLineCounter(buildPath("src/test/resources/valid")).countLines().getLinesCount(),
-                            "valid folder contains 3 files with 8 in sum java code lines - 3 + 0 + 5"),
+            assertEquals(8,
+                    getFolderCount("src/test/resources/valid"),
+                    "valid folder contains 3 files with 8 in sum java code lines - 3 + 0 + 5");
 
-                    () -> assertEquals(0,
-                            new DirectoryLineCounter(buildPath("src/test/resources/empty")).countLines().getLinesCount(),
-                            "empty folder contains 0 lines")
-            );
+            assertEquals(0,
+                    getFolderCount("src/test/resources/empty"),
+                    "empty folder contains 0 lines");
+        }
+
+        private int getFolderCount(String folder) {
+            return new FolderLinesCounter(buildPath(folder)).countLines().getLinesCount();
         }
 
         @Test
         void testNegativeCases() {
-            assertAll(
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new DirectoryLineCounter(buildPath("src/folder_not_exists")).countLines().getLinesCount(),
-                            "if folder doesn't exist exception should be thrown"),
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFolderCount("src/folder_not_exists"),
+                    "if folder doesn't exist exception should be thrown");
 
-                    () -> assertThrows(IllegalArgumentException.class,
-                            () -> new DirectoryLineCounter(buildPath("src/test/resources/invalid")).countLines().getLinesCount(),
-                            "if folder content is invalid exception should be thrown")
-            );
+            assertThrows(IllegalArgumentException.class,
+                    () -> getFolderCount("src/test/resources/invalid"),
+                    "if folder content is invalid exception should be thrown");
         }
     }
 }

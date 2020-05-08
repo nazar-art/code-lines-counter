@@ -5,6 +5,7 @@ import com.codeminders.model.LinesStats;
 import java.io.IOException;
 import java.nio.file.Files;
 import java.nio.file.Path;
+import java.util.Comparator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
@@ -12,12 +13,12 @@ import java.util.stream.Stream;
 /**
  * @author Nazar Lelyak.
  */
-public class DirectoryLineCounter implements LinesCounter {
+public class FolderLinesCounter implements LinesCounter {
 
     private Path root;
     private List<? extends LinesCounter> subFolders;
 
-    public DirectoryLineCounter(Path path) {
+    public FolderLinesCounter(Path path) {
         validateResource(path);
         root = path;
 
@@ -29,7 +30,8 @@ public class DirectoryLineCounter implements LinesCounter {
     private void collectSubResources(Path resource) {
         try (Stream<Path> entries = Files.list(resource)) {
             subFolders = entries
-                    .map(DirectoryLineCounter::new)
+                    .map(FolderLinesCounter::new)
+                    .sorted(Comparator.comparing(d -> d.root))
                     .collect(Collectors.toList());
         } catch (IOException e) {
             System.err.println("Exception while traversing sub resources: " + e.getMessage());

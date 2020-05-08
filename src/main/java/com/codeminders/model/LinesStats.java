@@ -2,7 +2,6 @@ package com.codeminders.model;
 
 import java.nio.file.Path;
 import java.util.List;
-import java.util.Objects;
 
 /**
  * @author Nazar Lelyak.
@@ -42,21 +41,6 @@ public class LinesStats {
                 ", linesCount=" + linesCount +
                 ", subResources=" + subResources +
                 '}';
-    }
-
-    @Override
-    public boolean equals(Object o) {
-        if (this == o) return true;
-        if (!(o instanceof LinesStats)) return false;
-        LinesStats that = (LinesStats) o;
-        return linesCount == that.linesCount &&
-                resource.equals(that.resource) &&
-                Objects.equals(subResources, that.subResources);
-    }
-
-    @Override
-    public int hashCode() {
-        return Objects.hash(resource, linesCount, subResources);
     }
 
     public static class Builder {

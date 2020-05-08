@@ -24,12 +24,12 @@ public class FileLinesCounter implements LinesCounter {
     public FileLinesCounter(Path path) {
         validateResource(path);
         validateFile(path);
-        this.filePath = path;
+        filePath = path;
     }
 
     private void validateFile(Path path) {
         if (!path.getFileName().toString().endsWith(".java")) {
-            throw new IllegalArgumentException("Invalid java file: " + path);
+            throw new IllegalArgumentException("Invalid java file: " + path.getFileName());
         }
     }
 
@@ -56,11 +56,11 @@ public class FileLinesCounter implements LinesCounter {
 
                 // process block comments
                 if (line.contains(BLOCK_CODE_START) && line.contains(BLOCK_CODE_END)) {
-                    line = processInlineBlockComment(line);
+                    line = line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
                     isBlockComment = false;
 
                 } else if (line.contains(BLOCK_CODE_END) && isBlockComment) {
-                    line = processBlockCodeEnd(line);
+                    line = line.replace(BLOCK_CODE_END, "");
                     isBlockComment = false;
 
                 } else if (isBlockComment) {
@@ -69,7 +69,7 @@ public class FileLinesCounter implements LinesCounter {
 
                 // line comments
                 if (line.contains(LINE_CODE)) {
-                    line = processLineComment(line);
+                    line = line.substring(0, line.indexOf(LINE_CODE));
                 }
 
                 // count code results
@@ -83,17 +83,4 @@ public class FileLinesCounter implements LinesCounter {
         }
         return counter;
     }
-
-    private String processBlockCodeEnd(String line) {
-        return line.replace(BLOCK_CODE_END, "");
-    }
-
-    private String processInlineBlockComment(String line) {
-        return line.replaceAll(INLINE_BLOCK_COMMENT_REGEX, "");
-    }
-
-    private String processLineComment(String line) {
-        return line.substring(0, line.indexOf(LINE_CODE));
-    }
-
 }

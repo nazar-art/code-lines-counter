@@ -15,7 +15,7 @@ public interface LinesCounter {
 
     default void validateResource(Path path) {
         if (path == null || !Files.exists(path)) {
-            throw new IllegalArgumentException("Resource doesn't exist");
+            throw new IllegalArgumentException("Resource isn't valid: " + path);
         }
     }
 }
