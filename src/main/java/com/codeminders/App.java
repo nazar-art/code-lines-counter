@@ -35,12 +35,13 @@ public class App {
      *             or absolute `/home/nazar/Software/java/jdk1.8.0_45/src`.
      */
     public static void main(String[] args) {
+
         if (args.length != 1 || args[0].isEmpty()) {
             System.err.println("Incorrect usage:");
             System.err.println("Please provide correct file or folder path");
             System.err.println("Example: /tmp/java_sources_folder");
             System.err.println("Example: /tmp/JavaDemo.java");
-            System.exit(0);
+            return;
         }
 
         String resource = args[0];

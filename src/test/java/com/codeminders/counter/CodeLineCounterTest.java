@@ -1,19 +1,12 @@
 package com.codeminders.counter;
 
-import com.codeminders.counter.DirectoryLineCounter;
-import com.codeminders.counter.FileLinesCounter;
-import org.junit.jupiter.api.BeforeEach;
+import com.codeminders.BaseTest;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.TestReporter;
 import org.junit.jupiter.api.condition.EnabledOnOs;
 import org.junit.jupiter.api.condition.OS;
-
-import java.nio.file.Path;
-import java.nio.file.Paths;
 
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -26,15 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  */
 @EnabledOnOs({OS.LINUX, OS.MAC})
 @DisplayName("Testing Java Code Lines Counting App class")
-public class CodeLineCounterTest {
-
-    @BeforeEach
-    void setUp(TestInfo testInfo, TestReporter reporter) {
-        String infoMessage = String
-                .format("Running: %s with Tags: %s%n", testInfo.getDisplayName(), testInfo.getTags());
-
-        reporter.publishEntry(infoMessage);
-    }
+public class CodeLineCounterTest implements BaseTest {
 
     @Nested
     @Tag("File")
@@ -90,10 +75,6 @@ public class CodeLineCounterTest {
                             "if file is json throw exception")
             );
         }
-    }
-
-    private Path buildPath(String name) {
-        return Paths.get(name);
     }
 
     @Nested
