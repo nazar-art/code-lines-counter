@@ -19,7 +19,7 @@ public class FileLinesCounter implements LinesCounter {
 
     private static final String INLINE_BLOCK_COMMENT_REGEX = "/\\*/*(?s:(?!\\*/).)*\\*/";
 
-    private Path filePath;
+    private final Path filePath;
 
     public FileLinesCounter(Path path) {
         validateResource(path);

@@ -10,8 +10,7 @@ import java.util.Objects;
  * @author Nazar Lelyak.
  */
 public class ConsoleWriter implements Writer {
-
-    private StringBuilder sb = new StringBuilder();
+    private final StringBuilder sb = new StringBuilder();
 
     @Override
     public void write(PrintStream out, LinesCounter linesCounter) {
@@ -19,12 +18,14 @@ public class ConsoleWriter implements Writer {
         out.print(sb.toString());
     }
 
-    private void formatConsoleOutput(String tab, LinesStats report) {
-        String prettyPrintMsg = String.format("%s%s : %s%n", tab, report.getResource().getFileName(), report.getLinesCount());
+    private void formatConsoleOutput(String tab, LinesStats stats) {
+        String prettyPrintMsg = String.format(
+                "%s%s : %s%n", tab, stats.getResource().getFileName(), stats.getLinesCount()
+        );
         sb.append(prettyPrintMsg);
 
-        if (report.getSubResources() != null) {
-            report.getSubResources().stream()
+        if (stats.getSubResources() != null) {
+            stats.getSubResources().stream()
                     .filter(Objects::nonNull)
                     .forEach(res -> formatConsoleOutput(tab.concat("  "), res));
         }

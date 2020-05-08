@@ -11,6 +11,8 @@ import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.condition.EnabledOnOs;
+import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.ByteArrayOutputStream;
@@ -22,6 +24,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Nazar Lelyak.
  */
+@EnabledOnOs({OS.LINUX, OS.MAC})
 @DisplayName("Testing Console Output")
 class ConsoleOutputTest implements BaseTest {
 
@@ -30,17 +33,17 @@ class ConsoleOutputTest implements BaseTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
-    private final StringBuilder expectedErrMsg = new StringBuilder();
+    private final StringBuilder expectedErrInfo = new StringBuilder();
 
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
 
-        expectedErrMsg.append("Incorrect usage:").append(System.lineSeparator());
-        expectedErrMsg.append("Please provide correct file or folder path").append(System.lineSeparator());
-        expectedErrMsg.append("Example: /tmp/java_sources_folder").append(System.lineSeparator());
-        expectedErrMsg.append("Example: /tmp/JavaDemo.java").append(System.lineSeparator());
+        expectedErrInfo.append("Incorrect usage:").append(System.lineSeparator());
+        expectedErrInfo.append("Please provide correct file or folder path").append(System.lineSeparator());
+        expectedErrInfo.append("Example: /tmp/java_sources_folder").append(System.lineSeparator());
+        expectedErrInfo.append("Example: /tmp/JavaDemo.java").append(System.lineSeparator());
     }
 
     @AfterEach
@@ -66,32 +69,13 @@ class ConsoleOutputTest implements BaseTest {
         void testCorrectFolderInput() {
             App.main(new String[]{"src/test/resources/valid"});
 
-            StringBuilder sb = new StringBuilder("valid : 8").append(System.lineSeparator());
+            StringBuilder sb = new StringBuilder();
+            sb.append("valid : 8").append(System.lineSeparator());
             sb.append("  0_code_lines.java : 0").append(System.lineSeparator());
             sb.append("  3_code_lines.java : 3").append(System.lineSeparator());
             sb.append("  5_code_lines.java : 5").append(System.lineSeparator());
 
             assertEquals(sb.toString(), outContent.toString());
-        }
-
-        @Test
-        void testIfEmptyInputExceptionShouldBeThrown() {
-            App.main(new String[]{""});
-            assertEquals(expectedErrMsg.toString(), errContent.toString());
-        }
-
-        @Test
-        void testIfNoInputExceptionShouldBeThrown() {
-            App.main(new String[]{});
-            assertEquals(expectedErrMsg.toString(), errContent.toString());
-        }
-
-        @Test
-        void testIfTwoInputsExceptionShouldBeThrown() {
-
-
-            App.main(new String[]{"", ""});
-            assertEquals(expectedErrMsg.toString(), errContent.toString());
         }
 
         @Test
@@ -120,6 +104,23 @@ class ConsoleOutputTest implements BaseTest {
                     "if folder doesn't exist exception should be thrown");
         }
 
+        @Test
+        void testIfEmptyInputExceptionShouldBeThrown() {
+            App.main(new String[]{""});
+            assertEquals(expectedErrInfo.toString(), errContent.toString());
+        }
+
+        @Test
+        void testIfNoInputExceptionShouldBeThrown() {
+            App.main(new String[]{});
+            assertEquals(expectedErrInfo.toString(), errContent.toString());
+        }
+
+        @Test
+        void testIfTwoInputsExceptionShouldBeThrown() {
+            App.main(new String[]{"", ""});
+            assertEquals(expectedErrInfo.toString(), errContent.toString());
+        }
 
         private Executable getAppInstance(String... resource) {
             return () -> App.main(resource);

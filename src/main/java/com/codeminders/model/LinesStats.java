@@ -7,10 +7,9 @@ import java.util.List;
  * @author Nazar Lelyak.
  */
 public class LinesStats {
-
-    private Path resource;
-    private int linesCount;
-    private List<LinesStats> subResources;
+    private final Path resource;
+    private final int linesCount;
+    private final List<LinesStats> subResources;
 
     private LinesStats(Path resource, int linesCount, List<LinesStats> subResources) {
         this.resource = resource;

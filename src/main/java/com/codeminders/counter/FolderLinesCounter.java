@@ -15,7 +15,7 @@ import java.util.stream.Stream;
  */
 public class FolderLinesCounter implements LinesCounter {
 
-    private Path root;
+    private final Path root;
     private List<? extends LinesCounter> subFolders;
 
     public FolderLinesCounter(Path path) {
