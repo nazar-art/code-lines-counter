@@ -7,14 +7,11 @@ import java.util.List;
  * @author Nazar Lelyak.
  */
 public class LinesStats {
-    private final Path resource;
-    private final int linesCount;
-    private final List<LinesStats> subResources;
+    private Path resource;
+    private int linesCount;
+    private List<LinesStats> subResources;
 
-    private LinesStats(Path resource, int linesCount, List<LinesStats> subResources) {
-        this.resource = resource;
-        this.linesCount = linesCount;
-        this.subResources = subResources;
+    private LinesStats() {
     }
 
     public Path getResource() {
@@ -30,7 +27,7 @@ public class LinesStats {
     }
 
     public static Builder builder() {
-        return new Builder();
+        return new LinesStats().new Builder();
     }
 
     @Override
@@ -42,28 +39,31 @@ public class LinesStats {
                 '}';
     }
 
-    public static class Builder {
-        private Path resource;
-        private int linesCount;
-        private List<LinesStats> subResources;
+    public class Builder {
+
+        private Builder() {
+        }
 
         public Builder resource(Path path) {
-            this.resource = path;
+            LinesStats.this.resource = path;
             return this;
         }
 
         public Builder linesCount(int total) {
-            this.linesCount = total;
+            LinesStats.this.linesCount = total;
             return this;
         }
 
         public Builder subResources(List<LinesStats> resources) {
-            this.subResources = resources;
+            if (resources == null) {
+                throw new IllegalArgumentException("sub resources can't be null");
+            }
+            LinesStats.this.subResources = resources;
             return this;
         }
 
         public LinesStats build() {
-            return new LinesStats(resource, linesCount, subResources);
+            return LinesStats.this;
         }
     }
 }
