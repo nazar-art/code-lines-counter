@@ -1,7 +1,7 @@
 package com.codeminders;
 
-import com.codeminders.counter.DirectoryLineCounter;
 import com.codeminders.counter.FileLinesCounter;
+import com.codeminders.counter.FolderLinesCounter;
 import com.codeminders.counter.LinesCounter;
 import com.codeminders.writer.ConsoleWriter;
 import com.codeminders.writer.Writer;
@@ -20,7 +20,7 @@ public class App {
         Path path = Paths.get(name);
 
         if (Files.isDirectory(path)) {
-            return new DirectoryLineCounter(path);
+            return new FolderLinesCounter(path);
 
         } else if (Files.isRegularFile(path)) {
             return new FileLinesCounter(path);
@@ -32,7 +32,7 @@ public class App {
      * Main CLI method for processing input resource.
      *
      * @param args java file or resource location, like relative - `src/test/resources`
-     *             or absolute `/home/nazar/Software/java/jdk1.8.0_45/src`.
+     *             or absolute `/home/nazar/Software/java`.
      */
     public static void main(String[] args) {
 
