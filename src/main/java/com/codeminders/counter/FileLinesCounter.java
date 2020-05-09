@@ -22,7 +22,6 @@ public class FileLinesCounter implements LinesCounter {
     private final Path filePath;
 
     public FileLinesCounter(Path path) {
-        validateResource(path);
         validateFile(path);
         filePath = path;
     }
@@ -83,4 +82,5 @@ public class FileLinesCounter implements LinesCounter {
         }
         return counter;
     }
+
 }

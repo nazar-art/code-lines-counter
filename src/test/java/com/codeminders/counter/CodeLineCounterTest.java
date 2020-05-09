@@ -52,20 +52,12 @@ public class CodeLineCounterTest implements BaseTest {
         @Test
         void testNegativeCases() {
             assertThrows(IllegalArgumentException.class,
-                    () -> getFileCount("src/this_file_doesnt_exist.java"),
-                    "if file doesn't throw exception");
-
-            assertThrows(IllegalArgumentException.class,
                     () -> getFileCount("src/test/resources/invalid/mat-photo.jpg"),
                     "if file is photo throw exception");
 
             assertThrows(IllegalArgumentException.class,
                     () -> getFileCount("src/test/resources/invalid/test.txt"),
                     "if file is incorrect throw exception");
-
-            assertThrows(IllegalArgumentException.class,
-                    () -> new FileLinesCounter(null).countLines(),
-                    "if resource is null exception should be thrown");
 
             assertThrows(IllegalArgumentException.class,
                     () -> getFileCount(""),

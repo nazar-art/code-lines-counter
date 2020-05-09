@@ -19,7 +19,6 @@ public class FolderLinesCounter implements LinesCounter {
     private List<? extends LinesCounter> subFolders;
 
     public FolderLinesCounter(Path path) {
-        validateResource(path);
         root = path;
 
         if (Files.isDirectory(root)) {

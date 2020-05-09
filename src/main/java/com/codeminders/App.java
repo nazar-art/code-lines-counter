@@ -17,15 +17,21 @@ import java.nio.file.Paths;
 public class App {
 
     private static LinesCounter getLineCounter(String name) {
-        Path path = Paths.get(name);
+        if (name == null || !Files.exists(Paths.get(name))) {
+            throw new IllegalArgumentException("Resource doesn't exist");
+        }
 
+        Path path = Paths.get(name);
         if (Files.isDirectory(path)) {
             return new FolderLinesCounter(path);
 
         } else if (Files.isRegularFile(path)) {
             return new FileLinesCounter(path);
         }
-        throw new IllegalArgumentException("Unknown file format is provided for processing: " + name);
+
+        throw new IllegalArgumentException(
+                String.format("Unknown file format is provided for processing: %s", name)
+        );
     }
 
     /**
