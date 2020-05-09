@@ -19,10 +19,9 @@ public class ConsoleWriter implements Writer {
     }
 
     private void formatConsoleOutput(String tab, LinesStats stats) {
-        String prettyPrintMsg = String.format(
-                "%s%s : %s%n", tab, stats.getResource().getFileName(), stats.getLinesCount()
-        );
-        sb.append(prettyPrintMsg);
+        sb.append(String.format("%s%s : %s%n", tab,
+                stats.getResource().getFileName(),
+                stats.getLinesCount()));
 
         if (stats.getSubResources() != null) {
             stats.getSubResources().stream()

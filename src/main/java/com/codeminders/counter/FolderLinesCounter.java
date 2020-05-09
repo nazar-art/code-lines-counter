@@ -20,7 +20,6 @@ public class FolderLinesCounter implements LinesCounter {
 
     public FolderLinesCounter(Path path) {
         root = path;
-
         if (Files.isDirectory(root)) {
             collectSubResources(path);
         }
@@ -56,10 +55,9 @@ public class FolderLinesCounter implements LinesCounter {
                     .subResources(subResourcesResults)
                     .build();
         } else {
-            FileLinesCounter fileLinesCounter = new FileLinesCounter(root);
             stats = LinesStats.builder()
                     .resource(root)
-                    .linesCount(fileLinesCounter.countLinesForFile())
+                    .linesCount(new FileLinesCounter(root).countLinesForFile())
                     .build();
         }
 

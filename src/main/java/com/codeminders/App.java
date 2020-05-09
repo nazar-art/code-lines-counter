@@ -29,9 +29,7 @@ public class App {
             return new FileLinesCounter(path);
         }
 
-        throw new IllegalArgumentException(
-                String.format("Unknown file format is provided for processing: %s", name)
-        );
+        throw new IllegalArgumentException(String.format("Unknown resource format: %s", name));
     }
 
     /**

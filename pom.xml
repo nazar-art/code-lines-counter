@@ -6,8 +6,8 @@
     <modelVersion>4.0.0</modelVersion>
     <groupId>com.codeminders</groupId>
     <artifactId>code-lines-counter</artifactId>
-    <name>code-lines-counter</name>
 
+    <name>code-lines-counter</name>
     <packaging>jar</packaging>
     <version>1.0.0</version>
 
