@@ -14,7 +14,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
  * 
  * @author Nazar Lelyak.
  */
-@DisplayName("Testing Java Code Lines Counting App class")
+@DisplayName("Testing Java Code Lines Counting Logic")
 public class CodeLineCounterTest implements BaseTest {
 
     @Nested
@@ -75,7 +75,7 @@ public class CodeLineCounterTest implements BaseTest {
         void testPositiveCases() {
             assertEquals(8,
                     getFolderCount("src/test/resources/valid"),
-                    "valid folder contains 3 files with 8 in sum java code lines - 3 + 0 + 5");
+                    "valid folder contains 3 files with 8 in sum java code lines - 0 + 3 + 5");
 
             assertEquals(0,
                     getFolderCount("src/test/resources/empty"),

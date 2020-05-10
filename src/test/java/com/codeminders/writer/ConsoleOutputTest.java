@@ -3,6 +3,7 @@ package com.codeminders.writer;
 import com.codeminders.App;
 import com.codeminders.BaseTest;
 import com.codeminders.counter.FileLinesCounter;
+import com.codeminders.counter.FolderLinesCounter;
 import com.codeminders.counter.LinesCounter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
@@ -21,7 +22,7 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Nazar Lelyak.
  */
-@DisplayName("Testing Console Output")
+@DisplayName("Testing Output To Console")
 class ConsoleOutputTest implements BaseTest {
 
     private final ByteArrayOutputStream outContent = new ByteArrayOutputStream();
@@ -29,12 +30,18 @@ class ConsoleOutputTest implements BaseTest {
     private final PrintStream originalOut = System.out;
     private final PrintStream originalErr = System.err;
 
+    private final StringBuilder expectedValidInfo = new StringBuilder();
     private final StringBuilder expectedErrInfo = new StringBuilder();
 
     @BeforeEach
     void setUp() {
         System.setOut(new PrintStream(outContent));
         System.setErr(new PrintStream(errContent));
+
+        expectedValidInfo.append("valid : 8").append(System.lineSeparator());
+        expectedValidInfo.append("  0_code_lines.java : 0").append(System.lineSeparator());
+        expectedValidInfo.append("  3_code_lines.java : 3").append(System.lineSeparator());
+        expectedValidInfo.append("  5_code_lines.java : 5").append(System.lineSeparator());
 
         expectedErrInfo.append("Incorrect usage:").append(System.lineSeparator());
         expectedErrInfo.append("Please provide correct file or folder path").append(System.lineSeparator());
@@ -65,13 +72,7 @@ class ConsoleOutputTest implements BaseTest {
         void testCorrectFolderInput() {
             App.main(new String[]{"src/test/resources/valid"});
 
-            StringBuilder sb = new StringBuilder();
-            sb.append("valid : 8").append(System.lineSeparator());
-            sb.append("  0_code_lines.java : 0").append(System.lineSeparator());
-            sb.append("  3_code_lines.java : 3").append(System.lineSeparator());
-            sb.append("  5_code_lines.java : 5").append(System.lineSeparator());
-
-            assertEquals(sb.toString(), outContent.toString());
+            assertEquals(expectedValidInfo.toString(), outContent.toString());
         }
 
         @Test
@@ -129,14 +130,24 @@ class ConsoleOutputTest implements BaseTest {
     class ConsoleWriterTest {
 
         @Test
-        void testWriteToConsole() {
-            LinesCounter linesCounter = new FileLinesCounter(
+        @Tag("File")
+        void testConsoleOutputForFile() {
+            LinesCounter counter = new FileLinesCounter(
                     buildPath("src/test/resources/valid/3_code_lines.java")
             );
-            new ConsoleWriter().write(System.out, linesCounter);
+            new ConsoleWriter().write(System.out, counter);
 
             String expected = String.format("3_code_lines.java : 3%s", System.lineSeparator());
             assertEquals(expected, outContent.toString());
+        }
+
+        @Test
+        @Tag("Folder")
+        void testConsoleOutputForFolder() {
+            LinesCounter counter = new FolderLinesCounter(buildPath("src/test/resources/valid"));
+
+            new ConsoleWriter().write(System.out, counter);
+            assertEquals(expectedValidInfo.toString(), outContent.toString());
         }
     }
 }

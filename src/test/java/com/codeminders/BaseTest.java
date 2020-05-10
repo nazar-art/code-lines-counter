@@ -16,9 +16,11 @@ import java.nio.file.Paths;
 public interface BaseTest {
     @BeforeEach
     default void setUp(TestInfo testInfo, TestReporter reporter) {
-        String infoMessage = String
-                .format("Running: %s with Tags: %s%n", testInfo.getDisplayName(), testInfo.getTags());
-        reporter.publishEntry(infoMessage);
+        reporter.publishEntry(String.format(
+                "Running: %s with Tags: %s%n",
+                testInfo.getDisplayName(),
+                testInfo.getTags()
+        ));
     }
 
     default Path buildPath(String name) {
