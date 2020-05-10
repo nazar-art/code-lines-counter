@@ -20,7 +20,7 @@
     </properties>
 
     <build>
-        <finalName>code-line-counter</finalName>
+        <finalName>code-lines-counter</finalName>
         <plugins>
             <plugin>
                 <groupId>org.apache.maven.plugins</groupId>

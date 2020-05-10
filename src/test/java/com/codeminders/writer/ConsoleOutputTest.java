@@ -1,18 +1,15 @@
-package com.codeminders.console;
+package com.codeminders.writer;
 
 import com.codeminders.App;
 import com.codeminders.BaseTest;
 import com.codeminders.counter.FileLinesCounter;
 import com.codeminders.counter.LinesCounter;
-import com.codeminders.writer.ConsoleWriter;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.condition.EnabledOnOs;
-import org.junit.jupiter.api.condition.OS;
 import org.junit.jupiter.api.function.Executable;
 
 import java.io.ByteArrayOutputStream;
@@ -24,7 +21,6 @@ import static org.junit.jupiter.api.Assertions.assertThrows;
 /**
  * @author Nazar Lelyak.
  */
-@EnabledOnOs({OS.LINUX, OS.MAC})
 @DisplayName("Testing Console Output")
 class ConsoleOutputTest implements BaseTest {
 
@@ -80,7 +76,7 @@ class ConsoleOutputTest implements BaseTest {
 
         @Test
         void testInvalidFileInputs() {
-            assertThrows(IllegalArgumentException.class, getAppInstance("doesn't exist"),
+            assertThrows(IllegalArgumentException.class, getAppInstance("file_does_not_exist"),
                     "if input is incorrect exception should be thrown");
 
             assertThrows(IllegalArgumentException.class, getAppInstance("src/test/resources/invalid/mat-photo.jpg"),
@@ -122,8 +118,8 @@ class ConsoleOutputTest implements BaseTest {
             assertEquals(expectedErrInfo.toString(), errContent.toString());
         }
 
-        private Executable getAppInstance(String... resource) {
-            return () -> App.main(resource);
+        private Executable getAppInstance(String... resources) {
+            return () -> App.main(resources);
         }
     }
 
