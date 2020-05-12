@@ -2,9 +2,8 @@ package com.codeminders.counter;
 
 import com.codeminders.model.LinesStats;
 
-import java.io.BufferedReader;
-import java.io.FileReader;
 import java.io.IOException;
+import java.nio.file.Files;
 import java.nio.file.Path;
 import java.util.Scanner;
 
@@ -42,7 +41,7 @@ public class FileLinesCounter implements LinesCounter {
 
     int countLinesForFile() {
         int counter = 0;
-        try (Scanner scanner = new Scanner(new BufferedReader(new FileReader(filePath.toFile())))) {
+        try (Scanner scanner = new Scanner(Files.newBufferedReader(filePath))) {
             boolean isBlockComment = false;
 
             while (scanner.hasNext()) {
