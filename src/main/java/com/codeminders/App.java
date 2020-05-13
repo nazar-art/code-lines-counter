@@ -35,8 +35,8 @@ public class App {
     /**
      * Main CLI method for processing input resource.
      *
-     * @param args java file or resource location, like relative - `src/test/resources`
-     *             or absolute `/home/nazar/Software/java`.
+     * @param args java file or resource location, like relative - `src/test/resources/valid`
+     *             or `src/main/java`.
      */
     public static void main(String[] args) {
 
